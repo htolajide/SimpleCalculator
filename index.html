@@ -9,17 +9,115 @@
     <title>Mini App</title>
 
     <style>
-      
+      #container{background:#dddddd; width:50%; margin:auto; text-align:center; border:1px solid #ccc}
+#container h2{margin:0; padding:0; background:#ffffff; color:#000000; text-align:center; width:100%; font-family:sans-serif;}
+.details{width :70%; margin:0px auto 10px auto; border:2px solid #eee; min-height:100px; background:#fff; text-align:center;}
+.details h5{margin:0; padding:0; background:#aaaaaa; color:#ffffff; text-align:center; width:100%; height:30px; font-size:18px;}
+#input-text{margin:50px auto 20px auto; width:50%; height:40px; border-radius: 5px; font-size:18px}
+#okay{width:30%; height:40px; border:2px solid #020202; border-radius:5px; font-size:20px; margin:30px auto 20px auto; background:#ffffff;}
     </style>
   </head>
   <body>
-    
+    <div id="container">
+      <h2>Secrete Message App</h2>
+       <input type="text" id="input-text"  placeholder="Enter Sentence" required/>
+       <div id="first-rectangle" class="details">
+         <h5>First Rectangle</h5>
+       </div>
+       <div id="encoded-chunk" class="details">
+         <h5>Encoded Chunk</h5>
+       </div>
+       <div id="second-rectangle" class="details">
+         <h5>Second Rectangle</h5>
+       </div>
+       <button id="okay" class="okay-button">Normalise</button>
+     </div>
      <script>
-      const startApp = () => {
-        powerupTheUI();
-      };
-          
-      startApp();
+     const validate = () => {
+		let input = document.querySelector('#input-text').value;
+		if (input.indexOf(" ") < 2) {
+			alert ("You must enter a sentence.");
+		} else if(input.length < 50){
+		alert("You should enter sentence more 50 letters");
+		}
+	}
+
+	const startApp = () => {
+		
+	   let btn = document.querySelector('#okay');
+	   let input = document.querySelector('#input-text');
+	   input.onchange = validate;
+	   btn.onclick = function(){ 
+		validate();
+		let str = document.querySelector('#input-text').value;
+		str = str.replace(/\W/g,'').toLowerCase();
+		let k=0, r, c, l, s, output;
+		l = str.length; //get the length of normalised input
+		//console.log(str + " " +l);
+		r = Math.floor(l**0.5);
+		c = Math.ceil(l**0.5);
+		console.log(r +"  "+ c);
+		if(r*c < l){
+			r = c;
+		}
+ 	
+	
+	 s = new Array(r);
+	//console.log(s); 
+	for(h=0; h<s.length; h++){
+		s[h] = new Array(c);}
+	for(i=0; i<r; i++){
+		for(j=0; j<c; j++){
+			if(k<l){
+				s[i][j] = str.charAt(k);
+			}
+			if(s[i][j] === undefined){
+				s[i][j] = " ";
+			}
+			k++;
+	// console.log(s[i][j]);
+		}
+	// normalised string input
+		console.log(s[i].join(""));
+		output = document.createElement('p');
+		output.setAttribute("style", "margin:0; text-align:justify; display:block; letter-spacing:1px");
+		output.textContent = s[i].join("");
+		document.querySelector('#first-rectangle').appendChild(output);
+	}
+		
+	const invertArray = (array,arrayWidth,arrayHeight) => {
+		let newArray = [], coded, codedrect, chunk="";
+		for (x=0;x<arrayWidth;x++) {
+			newArray[x] = [];
+			for (y=0;y<arrayHeight;y++) {
+				newArray[x][y] = array[y][x];
+	//  console.log(newArray[x][y]);
+		}
+	// output codedrect
+		codedrect = newArray[x].join("");
+		output = document.createElement('p');
+		output.setAttribute("style", "margin:0; text-align:justify; display:block; leter-spacing:1px");
+		output.textContent = codedrect;
+		document.querySelector('#second-rectangle').appendChild(output);	
+	}
+	
+	//encoded string using transposed array
+		coded = newArray.join().replace(/\W/g,"");
+		console.log(coded);
+		
+	//chunk of encoded string
+		for(i=0; i<c; i++){
+			chunk += newArray[i].join("") + " "; 
+		}
+		console.log(newArray);
+		output = document.createElement('span');
+    output.textContent = chunk;
+		document.querySelector('#encoded-chunk').appendChild(output);
+		}
+				invertArray(s,c,r);
+	   }
+	}
+	startApp();
     </script>
   </body>
 </html>
