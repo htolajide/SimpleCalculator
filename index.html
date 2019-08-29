@@ -14,16 +14,28 @@
 .buttons{width :70%; margin:0px auto 10px auto; border:2px solid #eee; min-height:100px; background:#fff; text-align:center;}
 .buttons ul{display: block; margin:0; padding:0; min-height: 25%; }
 .buttons ul li{list-style-type:none; display: inline-block; border: 2px solid #ffffff; margin:0; padding:12px; background:#aaaaaa; 
-font-family:Arial, Helvetica, sans-serif; color:#ffffff; text-align:center; width:18%; height:40px; font-size: 30px; }
+font-family:Arial, Helvetica, sans-serif; color:#ffffff; text-align:center; width:18%; height:38px; font-size: 30px; }
 #equal-sign, #zero{ width: 43% }
 #input-text{margin:50px auto 20px auto; width:70%; height:40px; border-radius: 5px; font-size:18px}
 #okay{width:30%; height:40px; border:2px solid #020202; border-radius:5px; font-size:20px; margin:30px auto 20px auto; background:#ffffff;}
+/* iPads and Small Laptops */
+@media only screen and (min-width: 768px) and (max-width: 1100px){
+  .buttons ul li{list-style-type:none; display: inline-block; border: 2px solid #ffffff; margin:0; padding:12px; background:#aaaaaa; 
+    font-family:Arial, Helvetica, sans-serif; color:#ffffff; text-align:center; width:15%; height:35px; font-size: 26px; }
+    #equal-sign, #zero{ width: 40% }
+}
+@media only screen and (min-width: 240px) and (max-width: 767px){
+  .buttons ul li{list-style-type:none; display: inline-block; border: 2px solid #ffffff; margin:0; padding:12px; background:#aaaaaa; 
+    font-family:Arial, Helvetica, sans-serif; color:#ffffff; text-align:center; width:5%; height:25px; font-size: 20px; }
+    #equal-sign, #zero{ width: 30% }
+}
     </style>
   </head>
   <body>
     <div id="container">
       <h2>Simple Calculator</h2>
        <input type="text" id="input-text"   />
+       <input type="hidden" id="hidden-text" />  
        <div id="first-rectangle" class="buttons">
          <ul>
            <li>1</li>
@@ -59,114 +71,153 @@ font-family:Arial, Helvetica, sans-serif; color:#ffffff; text-align:center; widt
      
 	const startApp = () => {
      // get the input element
-     let plusminus2, firstDouble, secondDouble, totalDouble;
+     let plusminus2, firstDouble = 0, secondDouble, totalDouble;
      let plusClick, minusClick, multiplyClick, divideClick, decimalClick=0, equalClick=1; 
-	   const input = document.querySelector('input');
+	   const input = document.querySelector('#input-text');
+     const hiddeninput = document.querySelector('#hidden-text');
 	   const buttons = document.querySelectorAll('.buttons ul li');
-     buttons.forEach( button => { button.addEventListener("mouseenter", () => {button.setAttribute("style", "background: #dddddd; font-size: 32px; color: #aaaaaa")}, false)});
-     buttons.forEach( button => { button.addEventListener("mouseout", () => {button.removeAttribute("style")}, false)});
-     buttons.forEach( button => { button.addEventListener("click", () => { 
+     const calculator = (button) =>  { 
        let buttonvalue = button.textContent;
-       let inputvalue = input.value;
-       if (buttonvalue === "*") {
-        firstDouble = inputvalue;
-        input.value = " ";
-        multiplyClick=1;
-        decimalClick=0;
-
-       }else if  (buttonvalue === "/"){
-        firstDouble = inputvalue;
-        input.value = " ";
-        divideClick=1;
-        decimalClick=0;
-
-       }else if (buttonvalue === "+") {
-        firstDouble = inputvalue;
-        input.value = " ";
-        plusClick=1;
-        decimalClick=0;
-    
-       }else if(buttonvalue === "C"){
-          if(inputvalue.length > 0){
+       let hiddenvalue = hiddeninput.value; // use hiden input for calculator
+       let inputvalue = input.value; // use input for display
+       switch (buttonvalue) {
+         case "*":
+          if(firstDouble === 0){
+            firstDouble = parseFloat(hiddenvalue);
+          }else{
+            firstDouble *= parseFloat(hiddenvalue);
+          }
+          console.log(firstDouble);
+          input.value += buttonvalue;
+          hiddeninput.value = " ";
+          secondDouble = 0;
+          multiplyClick = 1;
+          decimalClick = 0;
+          break;
+         case "/":
+         if(firstDouble === 0){
+            firstDouble = parseFloat(hiddenvalue);
+          }else{
+          firstDouble /= parseFloat(hiddenvalue);
+          }
+          console.log(firstDouble);
+          input.value += buttonvalue;
+          hiddeninput.value = " ";
+          secondDouble = 0;
+          divideClick = 1;
+          decimalClick = 0;
+          break;
+         case "+":
+          firstDouble += parseFloat(hiddenvalue);
+          console.log(firstDouble);
+          input.value += buttonvalue;
+          hiddeninput.value = " ";
+          secondDouble = 0;
+          plusClick=1;
+          decimalClick=0;
+          break;
+         case "C":
+         if(inputvalue.length > 0){
 	          input.value = inputvalue.substr(0, inputvalue.length-1);
+            hiddeninput.value = hiddenvalue.substr(0, hiddenvalue.length-1);
 		      }else{
 				    input.value = inputvalue;
+            hiddeninput.value = hiddenvalue;
 				 }
           decimalClick=0;
-
-       }else if(buttonvalue === "."){
-        if(decimalClick==0){
+          break;
+        case ".":
+          if(decimalClick==0){
              input.value += buttonvalue;
+             hiddeninput.value += buttonvalue;
              decimalClick = 1;
            }else{
-             input.value = inputvalue;   
-        }
-
-       }else if (buttonvalue === "+/-"){
-        plusminus2 = inputvalue;
-        plusminus2 = plusminus2*(-1);
-        input.value = plusminus2;
-        decimalClick=0;
-
-       }else if (buttonvalue === "-") {
-        firstDouble = inputvalue;
-        input.value = " ";
-        minusClick=1;
-        decimalClick=0;
-       }else if (buttonvalue === "=") {
-        if(plusClick > 0){
-           secondDouble= Number(input.value);
-           totalDouble = Number(firstDouble)+secondDouble;
-           input.value = totalDouble;
-           firstDouble = 0;
+             input.value = inputvalue;
+             hiddeninput.value = hiddenvalue;   
+           }
+           break;
+         case "+/-":
+          plusminus2 = inputvalue;
+          plusminus2 = plusminus2*(-1);
+          input.value = plusminus2;
+          hiddeninput.value = plusminus2;
+          decimalClick=0;
+          break;
+         case "-":
+         if(firstDouble === 0){
+            firstDouble = parseFloat(hiddenvalue);
+          }else{
+          firstDouble -= parseFloat(hiddenvalue);
+          }
+           input.value += buttonvalue;
+           hiddeninput.value = " ";
            secondDouble = 0;
+           console.log(firstDouble);
+           minusClick=1;
+           decimalClick=0;
+          break;
+        case "=":
+          if(plusClick > 0){
+           secondDouble = parseFloat(hiddenvalue);
+           totalDouble = secondDouble + firstDouble;
+           input.value = totalDouble;
+           hiddeninput.value = totalDouble;
+           secondDouble = 0;
+           firstDouble = 0;
            plusClick = 0;
            equalClick=0;
            decimalClick=0;
-           factClick=0;
-           
          }
          if(minusClick > 0){
-           secondDouble= input.value;
-           totalDouble = firstDouble-secondDouble;
+           secondDouble= parseFloat(hiddenvalue);
+           totalDouble = firstDouble - secondDouble;
            input.value = totalDouble;
-           firstDouble = 0;
+           hiddeninput.value = totalDouble;
            secondDouble = 0;
+           firstDouble = 0;
            minusClick = 0;
            equalClick=0;
-             decimalClick=0;
+           decimalClick=0;
          }
          if(multiplyClick > 0){
-           secondDouble= input.value;
-           totalDouble = firstDouble*secondDouble;
+           secondDouble = parseFloat(hiddenvalue);
+           totalDouble =  firstDouble * secondDouble;
            input.value = totalDouble;
-           firstDouble = 0;
+           hiddeninput.value = totalDouble;
            secondDouble = 0;
+           firstDouble = 0;
            multiplyClick = 0;
            equalClick=0;
            decimalClick=0;
          }
          if(divideClick > 0){
-           secondDouble= input.value;
-           totalDouble = firstDouble/secondDouble;
+           secondDouble = parseFloat(hiddenvalue);
+           totalDouble = firstDouble / secondDouble;
            input.value = totalDouble;
-           firstDouble = 0;
+           hiddeninput.value = totalDouble;
            secondDouble = 0;
+           firstDouble = 0;
            divideClick = 0;
            equalClick=0;
            decimalClick=0;
          }
-       }else{
-         if (equalClick > 0){
-           input.value += buttonvalue;
-           equalClick = 1;
-         }else{
-          input.value = buttonvalue;
-          equalClick = 1;
-         }
+         console.log(firstDouble);
+         break;
+        default:
+          if (equalClick > 0){
+            input.value += buttonvalue;
+            hiddeninput.value += buttonvalue;
+            equalClick = 1;
+          }else{
+            input.value += buttonvalue;
+            hiddeninput.value = buttonvalue;
+            equalClick = 1;
+          }
        }
-       }, false)});
-		
+       };
+     buttons.forEach( button => { button.addEventListener("mouseenter", () => {button.setAttribute("style", "background: #dddddd; font-size: 200%; color: #aaaaaa")}, false)});
+     buttons.forEach( button => { button.addEventListener("mouseout", () => {button.removeAttribute("style")}, false)});
+     buttons.forEach( button => { button.addEventListener("click", (event) => {calculator(button); console.log(event)}, false)});
 		}
 	startApp();
     </script>
