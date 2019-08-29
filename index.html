@@ -85,12 +85,11 @@ font-family:Arial, Helvetica, sans-serif; color:#ffffff; text-align:center; widt
           if(firstDouble === 0){
             firstDouble = parseFloat(hiddenvalue);
           }else{
-            firstDouble *= parseFloat(hiddenvalue);
+            firstDouble = eval(input.value);
           }
           console.log(firstDouble);
           input.value += buttonvalue;
           hiddeninput.value = " ";
-          secondDouble = 0;
           multiplyClick = 1;
           decimalClick = 0;
           break;
@@ -98,21 +97,19 @@ font-family:Arial, Helvetica, sans-serif; color:#ffffff; text-align:center; widt
          if(firstDouble === 0){
             firstDouble = parseFloat(hiddenvalue);
           }else{
-            firstDouble /= parseFloat(hiddenvalue);
+            firstDouble = eval(input.value);
           }
           console.log(firstDouble);
           input.value += buttonvalue;
           hiddeninput.value = " ";
-          secondDouble = 0;
           divideClick = 1;
           decimalClick = 0;
           break;
          case "+":
-          firstDouble += parseFloat(hiddenvalue);
+          firstDouble = eval(input.value);
           console.log(firstDouble);
           input.value += buttonvalue;
           hiddeninput.value = " ";
-          secondDouble = 0;
           plusClick=1;
           decimalClick=0;
           break;
@@ -147,11 +144,10 @@ font-family:Arial, Helvetica, sans-serif; color:#ffffff; text-align:center; widt
          if(firstDouble === 0){
             firstDouble = parseFloat(hiddenvalue);
           }else{
-          firstDouble -= parseFloat(hiddenvalue);
+            firstDouble = eval(input.value);
           }
            input.value += buttonvalue;
            hiddeninput.value = " ";
-           secondDouble = 0;
            console.log(firstDouble);
            minusClick=1;
            decimalClick=0;
@@ -162,19 +158,15 @@ font-family:Arial, Helvetica, sans-serif; color:#ffffff; text-align:center; widt
            totalDouble = secondDouble + firstDouble;
            input.value = totalDouble;
            hiddeninput.value = totalDouble;
-           secondDouble = 0;
-           firstDouble = 0;
            plusClick = 0;
            equalClick=0;
            decimalClick=0;
          }
          if(minusClick > 0){
-           secondDouble= parseFloat(hiddenvalue);
+           secondDouble = parseFloat(hiddenvalue);
            totalDouble = firstDouble - secondDouble;
            input.value = totalDouble;
            hiddeninput.value = totalDouble;
-           secondDouble = 0;
-           firstDouble = 0;
            minusClick = 0;
            equalClick=0;
            decimalClick=0;
@@ -184,8 +176,6 @@ font-family:Arial, Helvetica, sans-serif; color:#ffffff; text-align:center; widt
            totalDouble =  firstDouble * secondDouble;
            input.value = totalDouble;
            hiddeninput.value = totalDouble;
-           secondDouble = 0;
-           firstDouble = 0;
            multiplyClick = 0;
            equalClick=0;
            decimalClick=0;
@@ -195,13 +185,10 @@ font-family:Arial, Helvetica, sans-serif; color:#ffffff; text-align:center; widt
            totalDouble = firstDouble / secondDouble;
            input.value = totalDouble;
            hiddeninput.value = totalDouble;
-           secondDouble = 0;
-           firstDouble = 0;
            divideClick = 0;
            equalClick=0;
            decimalClick=0;
          }
-         console.log(firstDouble);
          break;
         default:
           if (equalClick > 0){
