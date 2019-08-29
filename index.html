@@ -98,7 +98,7 @@ font-family:Arial, Helvetica, sans-serif; color:#ffffff; text-align:center; widt
          if(firstDouble === 0){
             firstDouble = parseFloat(hiddenvalue);
           }else{
-          firstDouble /= parseFloat(hiddenvalue);
+            firstDouble /= parseFloat(hiddenvalue);
           }
           console.log(firstDouble);
           input.value += buttonvalue;
@@ -217,7 +217,7 @@ font-family:Arial, Helvetica, sans-serif; color:#ffffff; text-align:center; widt
        };
      buttons.forEach( button => { button.addEventListener("mouseenter", () => {button.setAttribute("style", "background: #dddddd; font-size: 200%; color: #aaaaaa")}, false)});
      buttons.forEach( button => { button.addEventListener("mouseout", () => {button.removeAttribute("style")}, false)});
-     buttons.forEach( button => { button.addEventListener("click", (event) => {calculator(button); console.log(event)}, false)});
+     buttons.forEach( button => { button.addEventListener("click", () => calculator(button), false)});
 		}
 	startApp();
     </script>
